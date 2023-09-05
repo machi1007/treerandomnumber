@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大樹隨機順序產生器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #f06, #9f6);
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        #controls {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        #output {
+            font-size: 24px;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .number-card {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, opacity 0.2s;
+            opacity: 0;
+        }
+
+        .number-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media screen and (max-width: 600px) {
+            #controls {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>大樹隨機順序產生器</h1>
+    <div id="controls">
+        <label for="min">最小值：</label>
+        <input type="number" id="min" min="1" step="1" value="1">
+        <label for="max">最大值：</label>
+        <input type="number" id="max" min="1" step="1" value="10">
+        <button onclick="generateRandomOrder()">生成隨機順序</button>
+        <button onclick="clearOutput()">清除</button>
+    </div>
+    <div id="output"></div>
+
+    <script>
+        function generateRandomOrder() {
+            const min = parseInt(document.getElementById('min').value);
+            const max = parseInt(document.getElementById('max').value);
+
+            if (min >= max) {
+                alert('最小值必須小於最大值！');
+                return;
+            }
+
+            const numbers = [];
+
+            for (let i = min; i <= max; i++) {
+                numbers.push(i);
+            }
+
+            for (let i = numbers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+            }
+
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '';
+
+            numbers.forEach((number, index) => {
+                const numberDiv = document.createElement('div');
+                numberDiv.className = 'number-card';
+                numberDiv.textContent = number;
+                outputDiv.appendChild(numberDiv);
+
+                // Add animation with delay
+                setTimeout(() => {
+                    numberDiv.classList.add('show');
+                }, index * 50);
+            });
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
